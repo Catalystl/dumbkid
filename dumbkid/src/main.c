@@ -5,9 +5,22 @@
 
 int main(int argc, char **argv)
 {
-	printf("This is main.c!\n");
+	initscr();
 
-	addnums(3, 5);
+	start_color();
+	use_default_colors();
+
+	init_pair(1, COLOR_GREEN, COLOR_RED);
+	attron(COLOR_PAIR(1));
+
+	addstr("hi guys");
+
+	wprintw(stdscr, "We bruh %d games: (y/n): ", COLORS);
+
+	
+	getch();
+
+	endwin();
 
 	return 0;
 }

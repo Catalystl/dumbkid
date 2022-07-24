@@ -1,0 +1,117 @@
+initscr() starts curses mode
+endwin() will exit curses mode
+
+LINES and COLUMNS are global variables that determine the number of lines and columns the entire screen has
+
+Windows cannot overlap? WHAT? So you either create multiple non-overlapping windows and don't use stdscr, or just use stdscr
+
+wrefresh(win) will update a window to the changes you made
+refresh() is equivalent to wrefresh(stdscr)
+
+wclear(win) and clear() clear windows
+delwin(win) deletes a window and frees the memory it's using
+
+The cursor is the location where most output is placed in a window, and where input is expected; move the cursor with wmove(win, y, x)
+
+also move(y, x) is equal to wmove(stdscr, y, x)
+
+Cursor motion isn't shown on the screen until you refresh
+
+
+
+
+INPUT - it deserves its own section
+
+int getch(void) - will return a character from stdscr
+wgetch(win) reads from a window
+
+calling noecho() will make no characters typed from the user print on the screen
+
+calling cbreak() will make getch() immediately return keys instead of queueing them until the next whole line is read
+
+calling nodelay(stdscr, TRUE) will make getch return whether or not a key is pressed by a user at the moment, useful for games
+
+calling keypad(stdscr, TRUE) will allow for input reading of special keys like arrow keys
+
+These functions move the cursor and read the cursor's position at the same time:
+	int mvgetch(int y, int x);
+	int mvwgetch(WINDOW *win, int y, int x);
+
+
+
+
+OUTPUT - it also deserves its own section
+
+int waddch(WINDOW *win, chtype ch) - adds a character on the window at the current cursor position, then advances the cursor position
+
+When the cursor's position is advanced, it wraps to the beginning of the next line; if the next line is out of the window and you have called scrollok(win, TRUE), then everything in the window is scrolled up one line
+
+Characters are of the type chtype, which contain ASCII values of characters combined with video attributes such as colors
+
+mvwaddch(win, y, x, ch); is equivalent to wmove(win, y, x); waddch(win, ch);
+
+addch(ch); is equivalent to waddch(stdscr, ch);
+
+wechochar(win, ch); and echochar(ch); both add chars and then refresh the window and may be more efficient than separately calling functions for output and then refresh
+
+int waddstr(WINDOW *win, const char *str); and int addstr(const char *str) print a null-terminated string at the cursor position, then move the cursor accordingly
+
+int wprintw(WINDOW *win, char *fmt ...); and int printw(char *fmt ...); do formatted output like printf
+
+
+
+
+
+ATTRIBUTE - IT'S FUCKING IMPORTANT OK
+
+Attribute can be used in two ways: printing a char with a special attribute or setting a window's attributes then printing characters like normal
+
+To print a char with special attributes: waddch(win, 'X' | ATTRIBUTE_NAME);
+
+To set window attributes: wattron(WINDOW *win, int attr); or attron(int attr);
+
+Here are some predefined attributes:
+	
+        A_NORMAL        Normal display (no highlight)
+        A_STANDOUT      Best highlighting mode of the terminal.
+        A_UNDERLINE     Underlining
+        A_REVERSE       Reverse video
+        A_BLINK         Blinking
+        A_DIM           Half bright
+        A_BOLD          Extra bright or bold
+        A_PROTECT       Protected mode
+        A_INVIS         Invisible or blank mode
+        A_ALTCHARSET    Alternate character set
+        A_CHARTEXT      Bit-mask to extract a character
+        COLOR_PAIR(n)   Color-pair number n
+
+Before using colors, call start_color(); this creates color pairs, stored in the global variables COLORS and COLOR_PAIRS
+
+To use a predefined color pair as an attribute, call COLOR_PAIR(n) where n must satisfy
+	0 <= n < COLORS
+
+Color pairs can be redesigned like so:
+	init_pair(1, 2, 0);
+
+This redefines color pair #1 to use fg color #2 and bg color #0
+
+When start_color() is called, 8 basic colors are initialized: (these can be used with init_pair()
+        COLOR_BLACK
+        COLOR_RED
+        COLOR_GREEN
+        COLOR_YELLOW
+        COLOR_BLUE
+        COLOR_MAGENTA
+        COLOR_CYAN
+        COLOR_WHITE
+
+int pair_content(short pair, short *f, short *b) - shows what colors a pair uses
+int color_content(short color, short *r, short *g, short *b) - shows the rgb of a color
+
+Color can also be defined with init_color(short n, short r, short g, short b); where n is the index of color, which must be less than COLORS
+
+Each rgb value must be less than 1000
+
+To use transparency, you need to call use_default_colors(); this will assign default terminal fg/bg colors to -1
+
+int assume_default_colors(int fg, int bg); will tell which colors to paint for color pair 0. Color pair 0 cannot be changed with init_pair once you decide to use default colors
