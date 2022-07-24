@@ -1,0 +1,8 @@
+DUMB KID
+---
+
+Controls
+	T	...	talk
+	F	...	say fuck you
+	C	...	compliment
+	B	...	battle
