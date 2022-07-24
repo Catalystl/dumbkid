@@ -15,6 +15,7 @@ EXEC := kid
 
 all: $(BUILD_DIR)/$(EXEC)
 
+
 $(BUILD_DIR)/$(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $@ $(LDFLAGS)
 
@@ -22,8 +23,11 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
 
-.PHONY: clean
+.PHONY: clean run
 clean:
 	rm -r $(BUILD_DIR)
+
+run: $(BUILD_DIR)/$(EXEC)
+	@$(BUILD_DIR)/$(EXEC)
 
 -include $(DEPS)
