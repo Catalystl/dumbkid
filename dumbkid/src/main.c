@@ -2,21 +2,25 @@
 #include <signal.h>
 #include <ncurses.h>
 
+#include "util.h"
 #include "sleep.h"
 #include "kid.h"
 #include "text.h"
 
 #define SCREEN_TOO_SMALL_MSG	"The screen is too small to play this game."
 #define MIN_SCREEN_X		50
-#define MIN_SCREEN_Y		16
+#define MIN_SCREEN_Y		18
 #define	KID_Y			1
 #define	KID_X			4
-#define TEXT_Y			16
+#define TEXT_Y			15
 #define TEXT_X 			16
+#define CONTROLS_BOX_W		24
+#define CONTROLS_BOX_H		9
 
 #define reset_text_wrap()	text_wrap = getmaxx(stdscr) - TEXT_X
 
-static char *msg = "Fuck you kid! I eat cereal like cereal man these days (unfortunately he was rain down on by soup missile) but that means I am still better than you bro!";
+static char *urmsg = "Fuck you kid!";
+static char *msg = "Fuck you bitch!";
 static int msgpos = 0;
 
 // Program status struct
@@ -33,9 +37,12 @@ int main(int argc, char **argv)
 	// Init ncurses
 	initscr();
 
-	// Use terminal colors
+	// Use terminal colors & define some color pairs with them
 	start_color();
 	use_default_colors();
+	init_pair(1, COLOR_BLUE, -1);
+	init_pair(2, COLOR_RED, -1);
+	init_pair(3, COLOR_GREEN, -1);
 
 	// Don't echo keys typed by user, don't queue key presses, and don't delay the program waiting for input
 	noecho();
@@ -116,8 +123,47 @@ static void resize_handler(int sig)
 
 static void draw_gui(void)
 {
+	int my, mx;
+
+	getmaxyx(stdscr, my, mx);
+
 	draw_kid(KID_Y, KID_X);
 	draw_text(TEXT_Y, TEXT_X, msg, msgpos);
+
+	// Draw approach text
+	attron(COLOR_PAIR(3));
+	move(0, 0);
+	addstr("A sick kid approaches... bruh!");
+	attroff(COLOR_PAIR(3));
+
+	// Draw Names
+	attron(COLOR_PAIR(2));
+	move(13, 4);
+	addstr("You:");
+	move(15, 4);
+	addstr("Kid:");
+	attroff(COLOR_PAIR(2));
+
+	// Draw player's message
+	move(13, 16);
+	addstr(urmsg);
+
+	// Draw controls box
+	attron(COLOR_PAIR(1));
+	move(1, mx - CONTROLS_BOX_W - 2);
+	draw_box(CONTROLS_BOX_H, CONTROLS_BOX_W);
+	attroff(COLOR_PAIR(1));
+
+	move(2, mx - CONTROLS_BOX_W);
+	addstr("CONTROLS:");
+	move(4, mx - CONTROLS_BOX_W);
+	addstr("T ... Talk");
+	move(5, mx - CONTROLS_BOX_W);
+	addstr("C ... Compliment");
+	move(6, mx - CONTROLS_BOX_W);
+	addstr("F ... Say Fuck You");
+	move(7, mx - CONTROLS_BOX_W);
+	addstr("A ... Attack");
 }
 
 static void update_gui(void)
