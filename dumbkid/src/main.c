@@ -6,40 +6,47 @@
 #include "sleep.h"
 #include "kid.h"
 
-#define	KID_Y	5
-#define	KID_X	5
+#define	KID_Y	1
+#define	KID_X	4
 
 int main(int argc, char **argv)
 {
 	initscr();
-
-	signal(SIGWINCH, resizeHandler);
-
 	start_color();
 	use_default_colors();
-
-	addstr("welcome sick kid");
-	draw_kid(5, 5);
-	refresh();
-	islp(1);
-
-	clear();
-
 	noecho();
 	nodelay(stdscr, TRUE);
-	
-	draw_kid(KID_Y, KID_X);
+	signal(SIGWINCH, resizeHandler);
 
+	char *msg = "Fuck you kid!";
+	
+	draw_gui();
 	for (;;)
 	{
-		update_kid_eyes(KID_Y, KID_X);
-		move(2, 14);
+		update_gui();
 
-		if (getch() == 'q')
-			break;
+		switch (getch())
+		{
+			case 'x':
+				set_kid_mouth(KID_Y, KID_X, MOUTH_NONE);
+				break;
+			case 'n':
+				set_kid_mouth(KID_Y, KID_X, MOUTH_NORM);
+				break;
+			case 't':
+				set_kid_mouth(KID_Y, KID_X, MOUTH_TALK);
+				break;
+			case 'o':
+				set_kid_mouth(KID_Y, KID_X, MOUTH_SHOCK);
+				break;
+			case 'q':
+				goto end_game_loop;
+		}
 
 		fslp();
 	}
+	
+	end_game_loop:
 
 	endwin();
 
@@ -52,6 +59,17 @@ void resizeHandler(int sig)
 	refresh();
 
 	clear();
-	wborder(stdscr, 0, 0, 0, 0, 0, 0, 0, 0);
+	draw_gui();
 	refresh();
+}
+
+void draw_gui(void)
+{
+	draw_kid(KID_Y, KID_X);
+}
+
+void update_gui(void)
+{
+	update_kid(KID_Y, KID_X);
+	move(2, 14);
 }
