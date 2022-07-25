@@ -15,7 +15,6 @@ EXEC := kid
 
 all: $(BUILD_DIR)/$(EXEC)
 
-
 $(BUILD_DIR)/$(EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $@ $(LDFLAGS)
 

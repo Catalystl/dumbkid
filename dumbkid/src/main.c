@@ -4,7 +4,10 @@
 
 #include "main.h"
 #include "sleep.h"
-#include "housing/home.h"
+#include "kid.h"
+
+#define	KID_Y	5
+#define	KID_X	5
 
 int main(int argc, char **argv)
 {
@@ -15,24 +18,28 @@ int main(int argc, char **argv)
 	start_color();
 	use_default_colors();
 
-	init_pair(1, COLOR_GREEN, COLOR_RED);
-	attron(COLOR_PAIR(1));
-
-	islp(1);
-
+	addstr("welcome sick kid");
+	draw_kid(5, 5);
 	refresh();
-
 	islp(1);
-
-	addstr("hi guys");
-	refresh();
-
-	getch();
 
 	clear();
-	refresh();
 
-	islp(2);
+	noecho();
+	nodelay(stdscr, TRUE);
+	
+	draw_kid(KID_Y, KID_X);
+
+	for (;;)
+	{
+		update_kid_eyes(KID_Y, KID_X);
+		move(2, 14);
+
+		if (getch() == 'q')
+			break;
+
+		fslp();
+	}
 
 	endwin();
 
