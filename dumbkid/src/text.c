@@ -2,7 +2,6 @@
 #include <ncurses.h>
 
 #include "text.h"
-#include "kid.h"
 
 int text_wrap;
 

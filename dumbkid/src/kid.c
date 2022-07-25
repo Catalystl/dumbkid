@@ -24,6 +24,7 @@ static short mouth_frame = 0;
 
 static void update_kid_eyes(int, int);
 static void update_kid_mouth(int, int);
+static void draw_kid_static_mouth(int, int);
 
 void draw_kid(int y, int x)
 {
@@ -35,6 +36,8 @@ void draw_kid(int y, int x)
 		move(y + line, x);
 		addstr(kid_data[line]);
 	}
+
+	draw_kid_static_mouth(y, x);
 }
 
 static void update_kid_eyes(int y, int x)
@@ -105,12 +108,17 @@ void update_kid(int y, int x)
 	}
 }
 
+// Change mouth state and draw a static mouth (note: this should be called AFTER update_kid)
 void set_kid_mouth(int y, int x, int state)
 {
-	// Change mouth state and draw a static mouth (note: this should be called AFTER update_kid)
 	mouth_state = state;
-	move(y + 5, x + 4);
+	draw_kid_static_mouth(y, x);
+}
 
+// Redraws non-animated mouths if the screen was previously cleared
+static void draw_kid_static_mouth(int y, int x)
+{
+	move(y + 5, x + 4);
 	switch (mouth_state)
 	{
 		case MOUTH_NORM:
