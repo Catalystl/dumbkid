@@ -50,6 +50,8 @@ void draw_gui(void)
 	addstr("F ... Say Fuck You");
 	move(7, mx - CONTROLS_BOX_W);
 	addstr("A ... Attack");
+	move(8, mx - CONTROLS_BOX_W);
+	addstr("Q ... Quit Game");
 }
 
 void update_gui(void)

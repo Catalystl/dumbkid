@@ -26,6 +26,8 @@ static void update_kid_eyes(int, int);
 static void update_kid_mouth(int, int);
 static void draw_kid_static_mouth(int, int);
 
+char kid_eye = 'o';
+
 void draw_kid(int y, int x)
 {
 	int line;
@@ -51,23 +53,25 @@ static void update_kid_eyes(int y, int x)
 	{
 		case 0:
 			move(y + 2, x + 3);
-			addstr(" o");
+			addch(' ');
+			addch(kid_eye);
 			break;
 		case 1:
 			move(y + 2, x + 4);
 			addch(' ');
 			move(y + 3, x + 4);
-			addch('o');
+			addch(kid_eye);
 			break;
 		case 2:
 			move(y + 3, x + 3);
-			addstr("o ");
+			addch(kid_eye);
+			addch(' ');
 			break;
 		case 3:
 			move(y + 3, x + 3);
 			addch(' ');
 			move(y + 2, x + 3);
-			addch('o');
+			addch(kid_eye);
 			break;
 	}
 }

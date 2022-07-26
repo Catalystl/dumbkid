@@ -1,7 +1,7 @@
 #define SCREEN_TOO_SMALL_MSG	"The screen is too small to play this game."
 #define	APPROACH_MSG		"A sick kid approaches... bruh!"
 #define MIN_SCREEN_W		50
-#define MIN_SCREEN_H		18
+#define MIN_SCREEN_H		22
 #define	KID_Y			1
 #define	KID_X			4
 #define CONVO_Y			13

@@ -2,6 +2,7 @@
 #define	MOUTH_NORM	1
 #define	MOUTH_TALK	2
 #define	MOUTH_SHOCK	3
+extern char kid_eye;
 void draw_kid(int, int);
 void update_kid(int, int);
 void set_kid_mouth(int, int, int);
