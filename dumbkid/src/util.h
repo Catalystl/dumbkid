@@ -1,1 +1,2 @@
-void draw_box(int, int);
+void islp(int);
+void fslp(void);

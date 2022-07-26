@@ -1,25 +1,17 @@
-#include <ncurses.h>
+#include <time.h>
 
 #include "util.h"
 
-void draw_box(int lines, int cols)
+// Sleep for i seconds
+void islp(int i)
 {
-	int y, x;
+	struct timespec ts = {i, 0};
+	nanosleep(&ts, NULL);
+}
 
-	getyx(stdscr, y, x);
-	addch(ACS_ULCORNER);
-	move(y, x + cols - 1);
-	addch(ACS_URCORNER);
-	move(y + lines - 1, x);
-	addch(ACS_LLCORNER);
-	move(y + lines - 1, x + cols - 1);
-	addch(ACS_LRCORNER);
-	move(y, x + 1);
-	hline(ACS_HLINE, cols - 2);
-	move(y + 1, x);
-	vline(ACS_VLINE, lines - 2);
-	move(y + lines - 1, x + 1);
-	hline(ACS_HLINE, cols - 2);
-	move(y + 1, x + cols - 1);
-	vline(ACS_VLINE, lines - 2);
+// Sleep for 1/30 of a second
+void fslp(void)
+{
+	struct timespec ts = {0, 33333333L};
+	nanosleep(&ts, NULL);
 }
