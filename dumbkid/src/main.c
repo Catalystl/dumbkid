@@ -1,7 +1,10 @@
+#include <stdio.h>
+#include <errno.h>
 #include <stdlib.h>
 #include <time.h>
 #include <ctype.h>
 #include <signal.h>
+
 #include <ncurses.h>
 
 #include "util.h"
@@ -26,7 +29,8 @@ int main(int argc, char **argv)
 	char c;
 
 	// Init ncurses
-	initscr();
+	if (initscr() == NULL)
+		perror("initscr");
 
 	// Use terminal colors & define some color pairs with them
 	start_color();
