@@ -2,7 +2,7 @@
 
 A sick ncurses program you can use to simulate talking to a kid.
 
-(image here)
+![image](https://user-images.githubusercontent.com/76543296/181163781-8cea89cd-affe-4515-bbbe-c2a9e17d6c27.png)
 
 It doesn't use multiple ncurses windows, which, looking back at it, would've made the program a lot easier to make and probably be more efficient, but whatever, the code is still decently optimized.
 
