@@ -19,4 +19,4 @@ void draw_pmsg(void);
 void clear_convo(void);
 void draw_box(int, int);
 void reset_text_wrap(void);
-void resize_handler(int);
+void resize_gui(void);

@@ -122,7 +122,7 @@ void reset_text_wrap(void)
 	text_wrap = getmaxx(stdscr) - (CONVO_X + NAME_MSG_SPACING);
 }
 
-void resize_handler(int sig)
+void resize_gui(void)
 {
 	int my, mx;
 
@@ -130,6 +130,10 @@ void resize_handler(int sig)
 	refresh();
 
 	getmaxyx(stdscr, my, mx);
+
+	resizeterm(my, mx);
+
+	
 	if (mx < MIN_SCREEN_W || my < MIN_SCREEN_H)
 	{
 		clear();

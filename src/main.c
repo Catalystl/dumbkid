@@ -4,6 +4,7 @@
 #include <time.h>
 #include <ctype.h>
 #include <signal.h>
+#include <unistd.h>
 
 #include <ncurses.h>
 
@@ -26,8 +27,6 @@ static int randc(void);
 
 int main(int argc, char **argv)
 {
-	char c;
-
 	// Init ncurses
 	if (initscr() == NULL)
 		perror("initscr");
@@ -43,11 +42,7 @@ int main(int argc, char **argv)
 	noecho();
 	cbreak();
 	nodelay(stdscr, TRUE);
-
-	// Function to call on window resize
-	struct sigaction sa;
-	sa.sa_handler = resize_handler;
-	sigaction(SIGWINCH, &sa, NULL);
+	keypad(stdscr, TRUE);
 
 	// Set random seed
 	srand(time(NULL));
@@ -57,16 +52,31 @@ int main(int argc, char **argv)
 	draw_gui();
 
 	// Game loop
+	int c;
+
 	for (;;)
 	{
+		// Handle window resizing
+		if (c == KEY_RESIZE)
+		{
+			resize_gui();
+
+			// Input is flushed so KEY_RESIZE is not read infinitely
+			flushinp();
+		}
+
+		// Sleep for 1/30 of second, making this loop run roughly 30 fps
 		fslp();
+
+		// Get the next character of input
+		c = wgetch(stdscr);
 
 		// Don't progress through the game when the screen is too small
 		if (screen.too_small)
 			continue;
 
 		// Controls
-		switch (c = getch())
+		switch (c)
 		{
 			case 't':
 				start_convo(CONVO_TALK, get_convo_num(event.talk));
